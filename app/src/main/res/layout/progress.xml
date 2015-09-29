@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
+    android:background="@drawable/border"
+    android:layout_gravity="center"
+    android:weightSum="100"
+    >
+
+    <View
+        android:id="@+id/value"
+        android:background="@color/positive_color"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_gravity="left"
+        android:layout_weight="92"
+        />
+
+    <View
+        android:background="@color/negative_color"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        />
+
+</LinearLayout>

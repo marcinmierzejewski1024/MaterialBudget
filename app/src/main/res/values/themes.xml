@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ApplicationTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/accent_color</item>
+        <item name="colorPrimaryDark">@color/accent_dark</item>
+        <item name="android:colorAccent">@color/color8</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
+
+    </style>
+
+    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="deleteButton" parent="@android:style/Widget.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/negative_color</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">18dip</item>
+    </style>
+
+    <style name="accentButton" parent="@android:style/Widget.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/accent_color</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">18dip</item>
+
+    </style>
+
+
+</resources>

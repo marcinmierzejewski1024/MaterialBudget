@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        >
+        <Spinner
+            android:id="@+id/currencySpinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="2dp" />
+
+        <Spinner
+            android:id="@+id/periodSpinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="2dp" />
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/rates_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/seekBar1" />
+
+</LinearLayout>

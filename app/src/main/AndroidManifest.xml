@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pl.marcinmierzejewski.materialbudget"
+    android:versionCode="3"
+    android:versionName="1.0.3">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+    <uses-sdk android:minSdkVersion="14" />
+    <application
+        android:label="@string/app_name"
+        android:name="pl.marcinmierzejewski.materialbudget.MainApp"
+        android:theme="@style/ApplicationTheme"
+        android:icon="@drawable/ic_home">
+        <activity
+            android:name="pl.marcinmierzejewski.materialbudget.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name="pl.marcinmierzejewski.materialbudget.services.CurrencyExchangeDownloadService" />
+        <activity
+            android:name="pl.marcinmierzejewski.materialbudget.DetailActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="pl.marcinmierzejewski.materialbudget.MainActivity">
+        </activity>
+    </application>
+</manifest>

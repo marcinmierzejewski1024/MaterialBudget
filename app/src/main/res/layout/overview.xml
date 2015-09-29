@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/this_month"
+        android:id="@+id/textView"
+        android:singleLine="false"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="kwiecien 2015"
+        android:id="@+id/monthText"
+        android:padding="10dp" />
+
+</LinearLayout>
+
+    <include layout="@layout/divider" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="147dp"
+        android:orientation="vertical"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/budget"
+        android:id="@+id/textView3"
+        android:singleLine="false"
+
+        android:padding="10dp"
+        android:textStyle="bold" />
+
+
+
+    <include
+        android:id="@+id/expense_progress"
+        layout="@layout/progress"
+        />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="+1420 zł"
+            android:layout_gravity="left"
+            android:gravity="left"
+            android:padding="10dp"
+            android:id="@+id/income_text"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="-540 zł"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:padding="10dp"
+            android:id="@+id/outcome_text" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
