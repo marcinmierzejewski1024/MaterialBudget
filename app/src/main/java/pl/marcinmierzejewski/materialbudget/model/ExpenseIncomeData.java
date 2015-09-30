@@ -58,7 +58,7 @@ public class ExpenseIncomeData extends BaseData
             {
 
                 expenseIncome.setCashAmmountId(getMainData().get().getCashAmmountData().updateCashAmmount(expenseIncome.getCash()).getCashAmmountId());
-
+                expenseIncome.setCategoryId(getMainData().get().getCategoryData().storeCategory(expenseIncome.getCategory()).getCategoryId());
                 getDao().update(expenseIncome);
                 expenseIncome.setStoredInDb(true);
                 return expenseIncome;

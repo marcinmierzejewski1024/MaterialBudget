@@ -11,6 +11,7 @@ import android.widget.*;
 import pl.marcinmierzejewski.materialbudget.common.CommonQuestionDialog;
 import pl.marcinmierzejewski.materialbudget.common.CommonQuestionDialogFragment;
 import pl.marcinmierzejewski.materialbudget.model.ExpenseIncome;
+import pl.marcinmierzejewski.materialbudget.model.ExpenseIncomeType;
 import pl.marcinmierzejewski.materialbudget.model.MainData;
 
 import java.io.Serializable;
@@ -168,6 +169,11 @@ public class ExpenseDetailsFragment extends pl.marcinmierzejewski.materialbudget
 
         getActivity().sendBroadcast(new Intent(MainApp.CHANGE_DATA_BROADCAST));
 
+    }
+
+    @Override
+    protected boolean isIncome() {
+        return expense.getType() == ExpenseIncomeType.INCOME;
     }
 
     private void delete()

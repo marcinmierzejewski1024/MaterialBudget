@@ -68,6 +68,7 @@ public class CurrencyExchangeFragment extends CommonFragment implements
     private Spinner currencySpinner;
     private Spinner periodSpinner;
     private View progressView;
+    private AsyncTask<Void, Void, HashMap<Integer, CurrencyExchangeRate>> currentDbTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,9 +153,6 @@ public class CurrencyExchangeFragment extends CommonFragment implements
         leftAxis.setEnabled(false);
 
 
-       // setData();
-
-
         return rootView;
     }
 
@@ -167,6 +165,15 @@ public class CurrencyExchangeFragment extends CommonFragment implements
         progressView.setVisibility(View.GONE);
 
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        if(currentDbTask != null)
+            currentDbTask.cancel(true);
+    }
+
     private void setData() {
 
        showProgressBar();
@@ -181,7 +188,11 @@ public class CurrencyExchangeFragment extends CommonFragment implements
 
             final ArrayList<Entry> yVals1 = new ArrayList<Entry>();
             final int year = Calendar.getInstance().get(Calendar.YEAR);
-            new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
+
+            if(currentDbTask != null)
+                currentDbTask.cancel(true);
+
+            currentDbTask = new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
                 @Override
                 protected HashMap<Integer, CurrencyExchangeRate> doInBackground(Void... params) {
                     return dao.getRatingsFromYearMonthly(year, currency, Currency.getDefault());
@@ -248,7 +259,9 @@ public class CurrencyExchangeFragment extends CommonFragment implements
 
             final ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
-            new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
+            if(currentDbTask != null)
+                currentDbTask.cancel(true);
+            currentDbTask = new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
                 @Override
                 protected HashMap<Integer, CurrencyExchangeRate> doInBackground(Void... params) {
                     return dao.getRatingsFromLastMonth(currency, Currency.getDefault());
@@ -309,7 +322,9 @@ public class CurrencyExchangeFragment extends CommonFragment implements
 
             final ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
-            new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
+            if(currentDbTask != null)
+                currentDbTask.cancel(true);
+            currentDbTask = new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
                 @Override
                 protected HashMap<Integer, CurrencyExchangeRate> doInBackground(Void... params) {
                     return dao.getRatingsFromLastWeek(currency, Currency.getDefault());
@@ -379,6 +394,9 @@ public class CurrencyExchangeFragment extends CommonFragment implements
         int ratesIndex = h.getXIndex();
         if(period == TimePeriod.MONTH)
             ratesIndex++;
+
+        if(rates == null)
+            return;
 
         if(rates.get(ratesIndex) != null)
         {

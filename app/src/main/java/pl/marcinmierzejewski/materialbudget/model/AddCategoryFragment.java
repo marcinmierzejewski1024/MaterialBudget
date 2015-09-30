@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
+import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
+
 import pl.marcinmierzejewski.materialbudget.MainApp;
 import pl.marcinmierzejewski.materialbudget.R;
 
@@ -15,13 +18,15 @@ import java.sql.SQLException;
 /**
  * Created by dom on 08/04/15.
  */
-public class AddCategoryFragment extends Fragment implements View.OnClickListener
+public class AddCategoryFragment extends Fragment implements View.OnClickListener, ColorPickerView.OnColorChangedListener
 {
     View rootView;
     EditText nameEditText;
     Button addCategoryButton;
     RadioButton expense,income;
     boolean isIncome = false;
+    private ColorPickerView colorPicker;
+    private String color;
 
     //Todo move to oher package
     @Override
@@ -33,10 +38,12 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         addCategoryButton = (Button) rootView.findViewById(R.id.addCategoryButton);
         expense = (RadioButton) rootView.findViewById(R.id.expenseRadioButton);
         income = (RadioButton) rootView.findViewById(R.id.incomeRadioButton);
+        colorPicker = (ColorPickerView) rootView.findViewById(R.id.colorpickerview);
+        colorPicker.setOnColorChangedListener(this);
         addCategoryButton.setOnClickListener(this);
         expense.setOnClickListener(this);
         income.setOnClickListener(this);
-
+    
         return rootView;
     }
 
@@ -48,7 +55,7 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
             try
             {
                 String name = nameEditText.getText().toString();
-                Category newCategory = new Category(name,null,null,isIncome);
+                Category newCategory = new Category(name,color,null,isIncome);
                 MainData.getInstance().getCategoryData().storeCategory(newCategory);
                 Toast.makeText(getActivity(),getString(R.string.add_success),Toast.LENGTH_SHORT).show();
                 getActivity().sendBroadcast(new Intent(MainApp.CHANGE_DATA_BROADCAST));
@@ -71,6 +78,12 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         {
             isIncome = true;
         }
+
+    }
+
+    @Override
+    public void onColorChanged(int i) {
+        color = String.format("#%06X", 0xFFFFFF & i);
 
     }
 }

@@ -20,7 +20,6 @@ public class AddFragment extends CommonFragment implements DiffrentAmmountDialog
     public static final String INCOME = "income";
     public static final String EXPENSE = "expense";
 
-    boolean isIncome;
     protected boolean isDataChanged = false;
 
     View rootView;
@@ -48,21 +47,26 @@ public class AddFragment extends CommonFragment implements DiffrentAmmountDialog
         }
     };
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    protected boolean isIncome()
     {
         if(getActivity().getIntent().getExtras() != null)
         {
             String type = getActivity().getIntent().getExtras().getString(TYPE_OF_ADD_KEY);
             if (type.equals(INCOME))
             {
-                isIncome = true;
+                return true;
             }
             else
             {
-                isIncome = false;
+                return false;
             }
         }
+        return false;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
 
 
         //getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -106,7 +110,7 @@ public class AddFragment extends CommonFragment implements DiffrentAmmountDialog
 
         try
         {
-            if(isIncome)
+            if(isIncome())
             {
                 categories = MainData.getInstance().getCategoryData().getIncomeCategories();
             }
@@ -132,9 +136,9 @@ public class AddFragment extends CommonFragment implements DiffrentAmmountDialog
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                 {
-                    if(category==null || !category.equals(categories.get(position)))
+                    if(category==null || !category.equals(categories.get(position))) {
                         setDataChanged();
-
+                    }
                     category = categories.get(position);
                 }
 
@@ -282,7 +286,7 @@ public class AddFragment extends CommonFragment implements DiffrentAmmountDialog
         newExpense.setDate(new Date());
 
         newExpense.setCash(ammount);
-        if(isIncome)
+        if(isIncome())
             newExpense.setType(ExpenseIncomeType.INCOME);
         else
             newExpense.setType(ExpenseIncomeType.EXPENSE);
