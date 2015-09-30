@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -120,7 +121,10 @@ public abstract class CommonActivity extends AppCompatActivity
         final android.support.v7.app.ActionBar bar = getSupportActionBar();
         if(bar != null)
             bar.hide();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

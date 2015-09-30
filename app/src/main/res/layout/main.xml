@@ -26,6 +26,7 @@
         android:layout_margin="5dp"
         android:padding="10dp"
         >
+
     <!-- Framelayout to display Fragments -->
     <FrameLayout
         android:id="@+id/frame_container"
@@ -96,4 +97,5 @@
     />
 
 </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 </RelativeLayout>

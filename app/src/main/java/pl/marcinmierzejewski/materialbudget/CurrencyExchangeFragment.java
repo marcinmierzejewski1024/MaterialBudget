@@ -1,6 +1,7 @@
 package pl.marcinmierzejewski.materialbudget;
 
 import android.graphics.PointF;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
+import pl.marcinmierzejewski.materialbudget.common.CommonActivity;
 import pl.marcinmierzejewski.materialbudget.common.CommonFragment;
 import pl.marcinmierzejewski.materialbudget.model.Currency;
 import pl.marcinmierzejewski.materialbudget.model.CurrencyExchangeRate;
@@ -64,6 +67,7 @@ public class CurrencyExchangeFragment extends CommonFragment implements
     TextView ratesList;
     private Spinner currencySpinner;
     private Spinner periodSpinner;
+    private View progressView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class CurrencyExchangeFragment extends CommonFragment implements
         ratesList = (TextView) rootView.findViewById(R.id.rates_list);
         currencySpinner = (Spinner) rootView.findViewById(R.id.currencySpinner);
         periodSpinner = (Spinner) rootView.findViewById(R.id.periodSpinner);
+        progressView = rootView.findViewById(R.id.progress_bar);
 
         ArrayAdapter periodArrayAdapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.currency_range));
@@ -124,9 +129,7 @@ public class CurrencyExchangeFragment extends CommonFragment implements
 
         mChart.setDescription("");
 
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        mChart.setMaxVisibleValueCount(60);
+
 
         // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
@@ -149,160 +152,209 @@ public class CurrencyExchangeFragment extends CommonFragment implements
         leftAxis.setEnabled(false);
 
 
-        setData();
+       // setData();
 
 
         return rootView;
     }
 
+    public void showProgressBar() {
+            progressView.setVisibility(View.VISIBLE);
+            progressView.bringToFront();
+    }
 
+    public void hideProgressBar() {
+        progressView.setVisibility(View.GONE);
+
+    }
     private void setData() {
 
+       showProgressBar();
         if(period == TimePeriod.YEAR)
         {
             String[] months = getResources().getStringArray(R.array.months_abbr);
-            ArrayList<String> xVals = new ArrayList<String>();
+            final ArrayList<String> xVals = new ArrayList<String>();
             for (int i = 0; i < 12; i++) {
 
                 xVals.add(months[i % 12]);
             }
 
-            ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-            int year = Calendar.getInstance().get(Calendar.YEAR);
+            final ArrayList<Entry> yVals1 = new ArrayList<Entry>();
+            final int year = Calendar.getInstance().get(Calendar.YEAR);
+            new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
+                @Override
+                protected HashMap<Integer, CurrencyExchangeRate> doInBackground(Void... params) {
+                    return dao.getRatingsFromYearMonthly(year, currency, Currency.getDefault());
+                }
 
-            rates = dao.getRatingsFromYearMonthly(year, currency, Currency.getDefault());
-            if(rates == null)
-                return;
+                @Override
+                protected void onPostExecute(HashMap<Integer, CurrencyExchangeRate> rates) {
+                    super.onPostExecute(rates);
 
-            for (int i = 0; i < 12; i++) {
+                    if(rates == null)
+                        return;
 
-                float val = 0f;
-                if(rates.get(i)==null)
-                    continue;
-                else
-                    val = (float) rates.get(i).getRate();
+                    for (int i = 0; i < 12; i++) {
 
-                yVals1.add(new Entry(val, rates.get(i).getExchangeDate().getMonth()));
-            }
+                        float val = 0f;
+                        if(rates.get(i)==null)
+                            continue;
+                        else
+                            val = (float) rates.get(i).getRate();
 
-            LineDataSet set1 = new LineDataSet(yVals1, Currency.getDefault()+" -> "+currency.name());
-            set1.setDrawFilled(true);
-            set1.setDrawCubic(true);
-            set1.setFillAlpha(150);
-            set1.setValueFormatter(valueFormater);
-            set1.setCircleColorHole(getResources().getColor(R.color.color8));
-            set1.setFillColor(getResources().getColor(R.color.color1));
-            set1.setColors(colorArray);
-            set1.setCircleColors(colorArray);
+                        yVals1.add(new Entry(val, rates.get(i).getExchangeDate().getMonth()));
+                    }
 
-
-            ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-            dataSets.add(set1);
+                    LineDataSet set1 = new LineDataSet(yVals1, Currency.getDefault()+" -> "+currency.name());
+                    set1.setDrawFilled(true);
+                    set1.setDrawCubic(true);
+                    set1.setFillAlpha(150);
+                    set1.setValueFormatter(valueFormater);
+                    set1.setCircleColorHole(getResources().getColor(R.color.color8));
+                    set1.setFillColor(getResources().getColor(R.color.color1));
+                    set1.setColors(colorArray);
+                    set1.setCircleColors(colorArray);
 
 
-            LineData data = new LineData(xVals, dataSets);
-            data.setValueTextSize(10f);
-            data.setValueFormatter(valueFormater);
-            mChart.clear();
-            mChart.setData(data);
+                    ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+                    dataSets.add(set1);
+
+
+                    LineData data = new LineData(xVals, dataSets);
+                    data.setValueTextSize(10f);
+                    data.setValueFormatter(valueFormater);
+                    mChart.clear();
+                    mChart.setData(data);
+
+                    hideProgressBar();
+                }}.execute();
+
         }
         else if(period == TimePeriod.MONTH)
         {
             ArrayList<String> days= new ArrayList<String>();
             Calendar c = Calendar.getInstance();
-            int monthMaxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            final int monthMaxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
             for(int i = 1;i<=monthMaxDays;i++)
             {
                 days.add(""+i);
             }
 
-            ArrayList<String> xVals = new ArrayList<String>();
+            final ArrayList<String> xVals = new ArrayList<String>();
             for (int i = 0; i < monthMaxDays ; i++) {
 
                 xVals.add(days.get(i));
             }
 
-            ArrayList<Entry> yVals1 = new ArrayList<Entry>();
+            final ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
-            rates = dao.getRatingsFromLastMonth(currency, Currency.getDefault());
-
-            for (int i = 1; i <= monthMaxDays; i++)
-            {
-                float val = 0f;
-                if(rates.get(i)==null)
-                {
-                    //yVals1.add(new BarEntry(val, i));
+            new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
+                @Override
+                protected HashMap<Integer, CurrencyExchangeRate> doInBackground(Void... params) {
+                    return dao.getRatingsFromLastMonth(currency, Currency.getDefault());
                 }
-                else
-                {
-                    val = (float) rates.get(i).getRate();
-                    yVals1.add(new BarEntry(val, i-1));
+
+                @Override
+                protected void onPostExecute(HashMap<Integer, CurrencyExchangeRate> rates) {
+                    super.onPostExecute(rates);
+
+                    for (int i = 1; i <= monthMaxDays; i++)
+                    {
+                        float val = 0f;
+                        if(rates.get(i)==null)
+                        {
+                            //yVals1.add(new BarEntry(val, i));
+                        }
+                        else
+                        {
+                            val = (float) rates.get(i).getRate();
+                            yVals1.add(new BarEntry(val, i-1));
+                        }
+                    }
+
+                    LineDataSet set1 = new LineDataSet(yVals1, Currency.getDefault()+" -> "+currency.name());
+                    set1.setDrawFilled(true);
+                    set1.setDrawCubic(true);
+                    set1.setFillAlpha(150);
+                    set1.setValueFormatter(valueFormater);
+                    set1.setCircleColorHole(getResources().getColor(R.color.color8));
+                    set1.setFillColor(getResources().getColor(R.color.color1));
+                    set1.setColors(colorArray);
+                    set1.setCircleColors(colorArray);
+                    ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+                    dataSets.add(set1);
+
+                    LineData data = new LineData(xVals, dataSets);
+                    data.setValueTextSize(7f);
+
+                    data.setValueFormatter(valueFormater);
+                    mChart.clear();
+                    mChart.setData(data);
+
+                    hideProgressBar();
                 }
-            }
+            }.execute();
 
-            LineDataSet set1 = new LineDataSet(yVals1, Currency.getDefault()+" -> "+currency.name());
-            set1.setDrawFilled(true);
-            set1.setDrawCubic(true);
-            set1.setFillAlpha(150);
-            set1.setValueFormatter(valueFormater);
-            set1.setCircleColorHole(getResources().getColor(R.color.color8));
-            set1.setFillColor(getResources().getColor(R.color.color1));
-            set1.setColors(colorArray);
-            set1.setCircleColors(colorArray);
-            ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-            dataSets.add(set1);
 
-            LineData data = new LineData(xVals, dataSets);
-            data.setValueTextSize(7f);
 
-            data.setValueFormatter(valueFormater);
-            mChart.clear();
-            mChart.setData(data);
         }
         else if(period == TimePeriod.WEEK)
         {
             String[] weekDays = getResources().getStringArray(R.array.weekday_abbr);
-            ArrayList<String> xVals = new ArrayList<String>();
+            final ArrayList<String> xVals = new ArrayList<String>();
             for (int i = 0; i < 7; i++) {
 
                 xVals.add(weekDays[i % 7]);
             }
 
-            ArrayList<Entry> yVals1 = new ArrayList<Entry>();
+            final ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
-            rates = dao.getRatingsFromLastWeek(currency, Currency.getDefault());
+            new AsyncTask<Void,Void,HashMap<Integer, CurrencyExchangeRate>>(){
+                @Override
+                protected HashMap<Integer, CurrencyExchangeRate> doInBackground(Void... params) {
+                    return dao.getRatingsFromLastWeek(currency, Currency.getDefault());
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<Integer, CurrencyExchangeRate> rates) {
+                    super.onPostExecute(rates);
+
+                    for (int i = 1; i <= 7; i++)
+                    {
+                        float val = 0f;
+                        if(rates.get(i) == null)
+                            continue;
+                        else
+                            val = (float) rates.get(i).getRate();
 
 
-            for (int i = 1; i <= 7; i++)
-            {
-                float val = 0f;
-                if(rates.get(i) == null)
-                    continue;
-                else
-                    val = (float) rates.get(i).getRate();
+                        yVals1.add(new Entry(val, i));
+                    }
+
+                    LineDataSet set1 = new LineDataSet(yVals1, Currency.getDefault()+" -> "+currency.name());
+                    set1.setDrawFilled(true);
+                    set1.setDrawCubic(true);
+                    set1.setFillAlpha(150);
+                    set1.setValueFormatter(valueFormater);
+                    set1.setCircleColorHole(getResources().getColor(R.color.color8));
+                    set1.setFillColor(getResources().getColor(R.color.color1));
+                    set1.setColors(colorArray);
+                    set1.setCircleColors(colorArray);
+
+                    ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+                    dataSets.add(set1);
+
+                    LineData data = new LineData(xVals, dataSets);
+                    data.setValueTextSize(10f);
+                    mChart.clear();
+                    data.setValueFormatter(valueFormater);
+                    mChart.setData(data);
+
+                    hideProgressBar();
+                }
+            }.execute();
 
 
-                yVals1.add(new Entry(val, i));
-            }
-
-            LineDataSet set1 = new LineDataSet(yVals1, Currency.getDefault()+" -> "+currency.name());
-            set1.setDrawFilled(true);
-            set1.setDrawCubic(true);
-            set1.setFillAlpha(150);
-            set1.setValueFormatter(valueFormater);
-            set1.setCircleColorHole(getResources().getColor(R.color.color8));
-            set1.setFillColor(getResources().getColor(R.color.color1));
-            set1.setColors(colorArray);
-            set1.setCircleColors(colorArray);
-
-            ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-            dataSets.add(set1);
-
-            LineData data = new LineData(xVals, dataSets);
-            data.setValueTextSize(10f);
-            mChart.clear();
-            data.setValueFormatter(valueFormater);
-            mChart.setData(data);
         }
     }
 

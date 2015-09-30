@@ -227,7 +227,7 @@ public class CurrencyExchangeRateData extends BaseData
 
             }
 
-            Log.wtf("res list",""+result);
+            //Log.wtf("res list",""+result);
             return result;
         }
         catch (Exception e)
