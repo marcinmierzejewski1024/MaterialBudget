@@ -127,7 +127,7 @@ public class ExpenseIncomeData extends BaseData
         return results;
     }
 
-    public List<ExpenseIncome> getByCategoryId(Long categoryId, Date since, ExpenseIncomeType type) throws SQLException
+    public List<ExpenseIncome> getByCategoryId(Long categoryId, Date since,Date to, ExpenseIncomeType type) throws SQLException
     {
         final QueryBuilder<ExpenseIncome, Long> qb = getDao().queryBuilder();
 
@@ -136,6 +136,9 @@ public class ExpenseIncomeData extends BaseData
 
 
         Where<ExpenseIncome, Long> query = qb.where().ge("date", since);
+
+        if(to != null)
+            query.and().le("date",to);
 
         if(type != null)
             query.and().eq("type",type);
@@ -172,12 +175,12 @@ public class ExpenseIncomeData extends BaseData
         }
     }
 
-    public CashAmmount getSum(Date since,ExpenseIncomeType type)
+    public CashAmmount getSum(Date since,Date to,ExpenseIncomeType type)
     {
         CashAmmount sum = new CashAmmount();
         try
         {
-            for (ExpenseIncome expenseIncome : getByCategoryId(null, since,type))
+            for (ExpenseIncome expenseIncome : getByCategoryId(null, since,to,type))
             {
                 sum.addCash(expenseIncome.getCash());
             }

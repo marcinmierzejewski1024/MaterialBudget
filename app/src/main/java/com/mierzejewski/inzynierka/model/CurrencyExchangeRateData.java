@@ -118,7 +118,7 @@ public class CurrencyExchangeRateData extends BaseData
 
     public HashMap<Integer, CurrencyExchangeRate> getRatingsFromLastMonth(Currency from, Currency to)
     {
-        Date monthStart = MainApp.getFirstDayOfMonth();
+        Date monthStart = MainApp.getFirstDayOfMonth().getTime();
         try
         {
             final QueryBuilder<CurrencyExchangeRate, Long> qb = getDao().queryBuilder();

@@ -36,7 +36,8 @@
         android:layout_height="147dp"
         android:orientation="vertical"
         >
-    <TextView
+
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -46,13 +47,6 @@
 
         android:padding="10dp"
         android:textStyle="bold" />
-
-
-
-    <include
-        android:id="@+id/expense_progress"
-        layout="@layout/progress"
-        />
 
 
         <LinearLayout
@@ -82,7 +76,15 @@
             android:id="@+id/outcome_text" />
 
         </LinearLayout>
+
     </LinearLayout>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/monthChart"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+
+        />
 
 
 </LinearLayout>

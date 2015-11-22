@@ -32,11 +32,11 @@ public class MainApp extends Application
         return context;
     }
 
-    public static Date getFirstDayOfMonth()
+    public static Calendar getFirstDayOfMonth()
     {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH));
-        return cal.getTime();
+        return cal;
     }
 
     public boolean isDownloadingServiceRunning() {

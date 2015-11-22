@@ -112,7 +112,7 @@ public class CategoryFragment extends CommonFragment
             else
             {
                 data = dao.getCategoryData().getCategoryById(categoryId);
-                expenses = dao.getExpenseIncomeData().getByCategoryId(categoryId, new Date(0l), null);
+                expenses = dao.getExpenseIncomeData().getByCategoryId(categoryId, new Date(0l),null, null);
             }
         } catch (SQLException e)
         {

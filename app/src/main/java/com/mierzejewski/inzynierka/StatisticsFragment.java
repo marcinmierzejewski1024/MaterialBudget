@@ -116,7 +116,7 @@ public class StatisticsFragment extends CommonFragment implements OnChartValueSe
                 }
                 else if(period == TimePeriod.MONTH)
                 {
-                    since = MainApp.getFirstDayOfMonth();
+                    since = MainApp.getFirstDayOfMonth().getTime();
                 }
                 else if(period == TimePeriod.WEEK)
                 {
@@ -229,7 +229,7 @@ public class StatisticsFragment extends CommonFragment implements OnChartValueSe
             else
             {
 
-                categoryData = MainData.getInstance().getExpenseIncomeData().getByCategoryId(category.getCategoryId(), since,null);
+                categoryData = MainData.getInstance().getExpenseIncomeData().getByCategoryId(category.getCategoryId(), since,null,null);
             }
 
             ArrayList<String> xVals = new ArrayList<String>();
@@ -341,8 +341,8 @@ public class StatisticsFragment extends CommonFragment implements OnChartValueSe
         xVals.add(getString(R.string.expense));
         xVals.add(getString(R.string.income));
 
-        CashAmmount expensesSum = MainData.getInstance().getExpenseIncomeData().getSum(since, ExpenseIncomeType.EXPENSE);
-        CashAmmount incomeSum = MainData.getInstance().getExpenseIncomeData().getSum(since, ExpenseIncomeType.INCOME);
+        CashAmmount expensesSum = MainData.getInstance().getExpenseIncomeData().getSum(since,null, ExpenseIncomeType.EXPENSE);
+        CashAmmount incomeSum = MainData.getInstance().getExpenseIncomeData().getSum(since,null, ExpenseIncomeType.INCOME);
 
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         yVals1.add(new BarEntry(expensesSum.getPounds(),0,StatisticsState.EXPENSES));

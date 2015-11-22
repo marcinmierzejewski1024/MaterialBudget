@@ -11,7 +11,7 @@ public class CashAmmount extends AbsDatabaseItem
     @DatabaseField(generatedId = true)
     long cashAmmountId;
     @DatabaseField()
-    int pennies;
+    int pennies = 0;
     @DatabaseField(dataType= DataType.SERIALIZABLE)
     Currency currency;
 
@@ -83,8 +83,10 @@ public class CashAmmount extends AbsDatabaseItem
         }
         catch (Exception e)
         {
+            //TODO:wyswietlic jakis blad
             e.printStackTrace();
-            return null;
+
+            return 0;
         }
 
     }
@@ -102,6 +104,15 @@ public class CashAmmount extends AbsDatabaseItem
         if(cashAmmount!= null)
         {
             this.pennies += cashAmmount.getPennies(currency);
+        }
+    }
+
+    public void subCash(CashAmmount cashAmmount)
+    {
+        setChanged();
+        if(cashAmmount!= null)
+        {
+            this.pennies -= cashAmmount.getPennies(currency);
         }
     }
 
