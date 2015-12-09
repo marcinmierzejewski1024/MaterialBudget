@@ -82,4 +82,7 @@
     <string name="other">Inne</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="overview">Przegląd</string>
+    <string name="exchange_rates">Kursy walut</string>
+    <string name="stats">Statystyki</string>
 </resources>

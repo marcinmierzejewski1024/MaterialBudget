@@ -1,10 +1,9 @@
 package com.mierzejewski.inzynierka;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
@@ -107,7 +106,7 @@ public class OverviewFragment extends CommonFragment
 
     private void changeMonth(int months)
     {
-        Toast.makeText(this.getActivity(),"change month"+months,Toast.LENGTH_SHORT).show();
+
         since.add(Calendar.MONTH, months);
         updateViews();
 
@@ -147,7 +146,8 @@ public class OverviewFragment extends CommonFragment
             int dayOfMonth = 0;
             int dayOffset = 0;
 
-            yVals1.add(new Entry(0,0));
+            if(incomesAndExpenses.size() > 0)
+                yVals1.add(new Entry(0,0));
 
             for (ExpenseIncome item : incomesAndExpenses) {
 
@@ -202,4 +202,14 @@ public class OverviewFragment extends CommonFragment
     }
 
 
+    @Override
+    public String getTitle() {
+
+        return getResources().getString(R.string.overview);
+    }
+
+    @Override
+    public Drawable getLogo() {
+        return getResources().getDrawable(R.drawable.ic_home);
+    }
 }

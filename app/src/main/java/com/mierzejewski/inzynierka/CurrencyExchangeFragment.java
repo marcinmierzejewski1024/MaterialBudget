@@ -1,6 +1,7 @@
 package com.mierzejewski.inzynierka;
 
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -417,4 +418,16 @@ public class CurrencyExchangeFragment extends CommonFragment implements
 
     public void onNothingSelected() {
     };
+
+    @Override
+    public String getTitle() {
+
+        return getResources().getString(R.string.exchange_rates);
+    }
+
+    @Override
+    public Drawable getLogo() {
+
+        return getResources().getDrawable(R.drawable.money_graph);
+    }
 }

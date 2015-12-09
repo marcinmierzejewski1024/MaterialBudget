@@ -1,5 +1,6 @@
 package com.mierzejewski.inzynierka;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -10,7 +11,7 @@ import com.mierzejewski.inzynierka.model.Currency;
 /**
  * Created by dom on 04/11/14.
  */
-public class SettingsFragment extends PreferenceFragment
+public class SettingsFragment extends PreferenceFragment implements NameAndLogo
 {
 
     @Override
@@ -54,4 +55,15 @@ public class SettingsFragment extends PreferenceFragment
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
+    @Override
+    public String getTitle() {
+        return getString(R.string.action_settings);
+    }
+
+    @Override
+    public Drawable getLogo() {
+
+
+        return getResources().getDrawable(R.drawable.settings);
+    }
 }

@@ -28,8 +28,6 @@ public class MainActivity extends CommonActivity
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
     private ArrayList<NavDrawerItem> navDrawerItems;
@@ -65,15 +63,13 @@ public class MainActivity extends CommonActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        mTitle = mDrawerTitle = getTitle();
+        title = getTitle();
 
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
         // nav drawer icons from resources
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
+        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
@@ -104,18 +100,17 @@ public class MainActivity extends CommonActivity
                 R.string.app_name
         ) {
             public void onDrawerClosed(View view) {
-                getToolbar().setTitle(mTitle);
-                // calling onPrepareOptionsMenu() to show action bar icons
+                updateTitleAndLogo();
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                getToolbar().setTitle(mDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
+                updateTitleAndLogo();
                 invalidateOptionsMenu();
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
@@ -157,9 +152,11 @@ public class MainActivity extends CommonActivity
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             // display view for selected nav drawer item
+
             displayView(position);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -231,21 +228,13 @@ public class MainActivity extends CommonActivity
 
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
-            setTitle(navMenuTitles[position]);
-
-            getToolbar().setLogo(navDrawerItems.get(position).getIcon());
+            updateTitleAndLogo();
 
             mDrawerLayout.closeDrawer(mDrawerList);
         } else {
 
             Log.e("MainActivity", "Error in creating fragment");
         }
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getToolbar().setTitle(mTitle);
     }
 
 

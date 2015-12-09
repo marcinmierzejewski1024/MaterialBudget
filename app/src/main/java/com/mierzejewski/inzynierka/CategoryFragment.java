@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,5 +133,17 @@ public class CategoryFragment extends CommonFragment
     {
         super.onDestroy();
         getActivity().unregisterReceiver(refreshListBroadcast);
+    }
+
+    @Override
+    public String getTitle() {
+
+        return getResources().getString(R.string.category);
+    }
+
+    @Override
+    public Drawable getLogo() {
+
+        return getResources().getDrawable(R.drawable.ic_home);
     }
 }

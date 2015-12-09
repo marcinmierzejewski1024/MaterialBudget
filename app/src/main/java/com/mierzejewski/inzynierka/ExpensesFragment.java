@@ -3,6 +3,7 @@ package com.mierzejewski.inzynierka;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -30,7 +31,6 @@ public class ExpensesFragment extends CommonFragment
     private static final int NAMED_CATEGORIES = 8;
     public static final String TYPE_KEY = "typeKey";
     private Spinner range;
-
     public enum ExpenseFragmentType {EXPENSES, INCOMES};
 
 
@@ -141,4 +141,16 @@ public class ExpensesFragment extends CommonFragment
             Log.e("ExpenseFragment", "drawChartLegend", e);
         }
     }
+
+
+    @Override
+    public String getTitle() {
+        return "todo";
+    }
+
+    @Override
+    public Drawable getLogo() {
+        return null;
+    }
+
 }

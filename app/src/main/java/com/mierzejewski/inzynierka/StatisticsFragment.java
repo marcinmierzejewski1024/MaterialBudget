@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import java.util.List;
  */
 public class StatisticsFragment extends CommonFragment implements OnChartValueSelectedListener
 {
+
     private enum StatisticsState{
         EXPENSES_AND_INCOMES,EXPENSES,INCOMES,EXPENSES_CATEGORY, INCOMES_CATEGORY
     };
@@ -98,28 +100,21 @@ public class StatisticsFragment extends CommonFragment implements OnChartValueSe
         ArrayAdapter periodArrayAdapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.currency_range));
         periodSpinner.setAdapter(periodArrayAdapter);
-        periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 period = TimePeriod.values()[position];
 
-                if((period == TimePeriod.YEAR))
-                {
+                if ((period == TimePeriod.YEAR)) {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.clear();
                     calendar.set(Calendar.MONTH, 0);
                     calendar.set(Calendar.DAY_OF_MONTH, 1);
                     since = calendar.getTime();
-                }
-                else if(period == TimePeriod.MONTH)
-                {
+                } else if (period == TimePeriod.MONTH) {
                     since = MainApp.getFirstDayOfMonth().getTime();
-                }
-                else if(period == TimePeriod.WEEK)
-                {
+                } else if (period == TimePeriod.WEEK) {
 
                     Calendar monday = Calendar.getInstance();
                     monday.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -132,8 +127,7 @@ public class StatisticsFragment extends CommonFragment implements OnChartValueSe
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -397,6 +391,17 @@ public class StatisticsFragment extends CommonFragment implements OnChartValueSe
         return false;
     }
 
+    @Override
+    public String getTitle() {
+
+
+        return getResources().getString(R.string.stats);
+    }
+
+    @Override
+    public Drawable getLogo() {
+        return getResources().getDrawable(R.drawable.analytics);
+    }
 
 
 }

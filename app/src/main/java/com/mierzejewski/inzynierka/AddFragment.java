@@ -2,6 +2,7 @@ package com.mierzejewski.inzynierka;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -316,5 +317,16 @@ public class AddFragment extends CommonFragment implements DiffrentAmmountDialog
     {
         ammount.setPennies((int)(newVal*100l));
         updateViews();
+    }
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.add);
+    }
+
+    @Override
+    public Drawable getLogo() {
+        //TODO
+        return getResources().getDrawable(R.drawable.add_expense);
     }
 }

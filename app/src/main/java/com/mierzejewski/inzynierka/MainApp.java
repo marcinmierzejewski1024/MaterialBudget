@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 
 import com.mierzejewski.inzynierka.services.CurrencyExchangeDownloadService;
 
@@ -17,6 +18,7 @@ public class MainApp extends Application
     private static Context context;
     public final static String CHANGE_DATA_BROADCAST = "CHANGE_DATA_FILTER";
     public final static android.content.IntentFilter CHANGE_DATA_FILTER = new IntentFilter(CHANGE_DATA_BROADCAST);
+
 
 
     @Override
@@ -47,5 +49,14 @@ public class MainApp extends Application
             }
         }
         return false;
+    }
+
+    public static CharSequence getAppTitle() {
+
+        return getAppContext().getResources().getString(R.string.app_name);
+    }
+
+    public static Drawable getAppLogo() {
+        return getAppContext().getResources().getDrawable(R.drawable.ic_home);
     }
 }

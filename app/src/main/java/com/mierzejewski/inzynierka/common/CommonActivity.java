@@ -2,6 +2,7 @@ package com.mierzejewski.inzynierka.common;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -23,9 +24,9 @@ import java.io.Serializable;
  */
 public abstract class CommonActivity extends AppCompatActivity
 {
-
-
-    private ActionBarDrawerToggle drawerToggle;
+    protected CharSequence title;
+    protected ActionBarDrawerToggle drawerToggle;
+    protected Drawable logo;
 
     public abstract Fragment getFragment();
 
@@ -109,6 +110,17 @@ public abstract class CommonActivity extends AppCompatActivity
         Toolbar toolbar = getToolbar();
         setSupportActionBar(toolbar);
 
+        updateTitleAndLogo();
+    }
+
+
+    public void updateTitleAndLogo() {
+        if(getToolbar() != null)
+        {
+            getToolbar().setTitle(this.title);
+            getToolbar().setLogo(this.logo);
+
+        }
     }
 
     @Override
@@ -128,5 +140,27 @@ public abstract class CommonActivity extends AppCompatActivity
         if(getFragment()!= null)
             getFragment().onCreateOptionsMenu(menu,getMenuInflater());
         return true;
+    }
+
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        title = MainApp.getAppTitle();
+        logo = MainApp.getAppLogo();
+
+        if(fragment instanceof NameAndLogo)
+        {
+            title = ((NameAndLogo) fragment).getTitle();
+            logo = ((NameAndLogo) fragment).getLogo();
+        }
+
+        updateTitleAndLogo();
+
+        Toast.makeText(this, "onAttachFragment2"+title, Toast.LENGTH_LONG).show();
+
+
+
     }
 }

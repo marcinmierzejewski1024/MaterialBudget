@@ -2,6 +2,7 @@ package com.mierzejewski.inzynierka;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -256,5 +257,16 @@ public class ExpenseDetailsFragment extends com.mierzejewski.inzynierka.AddFragm
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public String getTitle() {
+        return "";
+    }
+
+    @Override
+    public Drawable getLogo() {
+        return MainApp.getAppLogo();
     }
 }
